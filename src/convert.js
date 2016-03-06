@@ -1,7 +1,7 @@
-var fs = require('fs')
-var glob = require('glob')
-var linebyline = require('n-readlines')
-var spawn = require('cross-spawn')
+import fs                            from 'fs'
+import glob                          from 'glob'
+import linebyline                    from 'n-readlines'
+import spawn                         from 'cross-spawn'
 
 function listFiles(path) {
 	return (glob
