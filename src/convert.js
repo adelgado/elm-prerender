@@ -13,7 +13,7 @@ import helpers                       from './helpers'
 function listFiles(path) {
 	return (find(path)
 		.filter(file => file.match(/\.elm$/))
-		.filter(hasView)
+		.filter(file => grep('view =', file) !== '')
 		.map(file => file.replace(path, ''))
 	)
 }
@@ -93,10 +93,6 @@ function makeFolders(filenames) {
 			}
 		}
 	})
-}
-
-function hasView(filename) {
-	return grep('view =', filename) !== ''
 }
 
 function executeBash(filename) {
