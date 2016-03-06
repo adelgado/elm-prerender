@@ -1,7 +1,7 @@
 {
-  "name": "elm-static-site",
-  "version": "1.0.0",
-  "description": "",
+  "name": "elm-prerender",
+  "version": "0.0.1",
+  "description": "Proof of concept static site generator from Elm files",
   "main": "index.js",
   "directories": {
     "example": "examples"
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eeue56/elm-static-site.git"
+    "url": "git+https://github.com/adelgado/elm-prerender.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Alessandro Delgado",
+  "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/eeue56/elm-static-site/issues"
+    "url": "https://github.com/adelgado/elm-prerender.git"
   },
-  "homepage": "https://github.com/eeue56/elm-static-site#readme",
+  "homepage": "https://github.com/adelgado/elm-prerender.git#readme",
   "dependencies": {
     "cross-spawn": "^2.1.5",
     "glob": "^7.0.3",

@@ -1,4 +1,4 @@
-# elm-static-site
+# elm-prerender
 
 Proof of concept static site generator from Elm files.
 
