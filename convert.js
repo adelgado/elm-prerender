@@ -115,9 +115,13 @@ function makeFolders(filenames) {
         if (filename.split('/').length > 1 || filename.startsWith('.') != -1) {
             var dir = filename.substring(0, filename.lastIndexOf('/'));
             try {
-                fs.mkdir(dir);
-            } catch (err) {
-                console.error(err);
+                fs.mkdirSync(dir)
+            } catch (e) {
+                if (e.code === 'EEXIST') {
+                    console.warn(`${dir} already exists`)
+                } else {
+                    throw e
+                }
             }
         }
     });
