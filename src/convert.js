@@ -15,69 +15,69 @@ function listFiles(path) {
 	)
 }
 
-function generatePort(module_name) {
-	const port_name = portName(module_name)
+function generatePort(moduleName) {
+	const portName = getPortName(moduleName)
 	return `
-port ${port_name} : String
-port ${port_name} =
-    ${module_name}.view
+port ${portName} : String
+port ${portName} =
+    ${moduleName}.view
         |> render`
 }
 
-function generateImport(module_name) {
-	return `import ${module_name}`
+function generateImport(moduleName) {
+	return `import ${moduleName}`
 }
 
-function portName(module_name) {
-	return module_name.replace('.','').toLowerCase()
+function getPortName(moduleName) {
+	return moduleName.replace('.','').toLowerCase()
 }
 
-function fileName(module_name, basedir, with_lower) {
+function fileName(moduleName, basedir, withLower) {
 	if (basedir === null) {
 		basedir = './'
 	}
 
-	const with_basedir = basedir + module_name.replace('.','/')
+	const withBasedir = basedir + moduleName.replace('.','/')
 
-	if (with_lower) {
-		return with_basedir.toLowerCase()
+	if (withLower) {
+		return withBasedir.toLowerCase()
 	}
 
-	return with_basedir
+	return withBasedir
 }
 
 function generateMapping(port, file) {
 	return `echo "fs.writeFile('${file}.html', elm.ports['${port}']);" >> _main.js`
 }
 
-function generate_vdom(module_names, basedir) {
-	const port_files = []
+function generateVDom(moduleNames, basedir) {
+	const portFiles = []
 
-	for (let i = module_names.length - 1; i >= 0; i--) {
-		port_files.push({
-			'port' : portName(module_names[i]),
-			'filename' : fileName(module_names[i], basedir, false)
+	for (let i = moduleNames.length - 1; i >= 0; i--) {
+		portFiles.push({
+			'port' : getPortName(moduleNames[i]),
+			'filename' : fileName(moduleNames[i], basedir, false)
 		})
 	}
 
-	const ports = module_names.map(generatePort).join('\n')
-	const imports = module_names.map(generateImport).join('\n')
+	const ports = moduleNames.map(generatePort).join('\n')
+	const imports = moduleNames.map(generateImport).join('\n')
 
-	const port_file_values = port_files.map(function(curr) {
+	const portFileValues = portFiles.map(function(curr) {
 		return curr.filename
 	})
 
-	const maps = port_files.map(function(curr) {
+	const maps = portFiles.map(function(curr) {
 		return generateMapping(curr.port, curr.filename)
 	})
 
 	const mappings = maps.join('\n')
 
-	makeFolders(port_file_values)
+	makeFolders(portFileValues)
 
 
-	const renderer_filename = '_Renderer.elm'
-	const runner_filename = './runner.sh'
+	const rendererFilename = '_Renderer.elm'
+	const runnerFilename = './runner.sh'
 
 	const template = `
 module Renderer where
@@ -91,20 +91,20 @@ render = Native.Renderer.toHtml
 
 ${ports}`
 
-	fs.writeFile(renderer_filename, template)
+	fs.writeFile(rendererFilename, template)
 
 	const executor = `
 #!/bin/sh
 elm-package install --yes
-elm make ${renderer_filename} --output=_main.js
+elm make ${rendererFilename} --output=_main.js
 echo "var fs = require('fs');" >> _main.js
 echo "var elm = Elm.worker(Elm.Renderer);" >> _main.js
 ${mappings}
 node _main.js`
 
-	fs.writeFileSync(runner_filename, executor)
+	fs.writeFileSync(runnerFilename, executor)
 
-	executeBash(runner_filename)
+	executeBash(runnerFilename)
 }
 
 function makeFolders(filenames) {
@@ -146,8 +146,8 @@ function hasView(filename) {
 }
 
 function cleanUp(name) {
-	const new_name = name.replace(__dirname, '')
-	return new_name.split('.')[0].replace('/', '.')
+	const newName = name.replace(__dirname, '')
+	return newName.split('.')[0].replace('/', '.')
 }
 
 function executeBash(filename) {
@@ -157,7 +157,7 @@ function executeBash(filename) {
 
 function main() {
 	const files = listFiles('examples/').map(cleanUp)
-	generate_vdom(files, 'output/')
+	generateVDom(files, 'output/')
 }
 
 main()

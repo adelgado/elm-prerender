@@ -16,3 +16,4 @@ rules:
   no-cond-assign: 0
   no-var: 1
   prefer-const: 1
+  camelcase: 1
