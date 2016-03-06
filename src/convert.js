@@ -1,7 +1,6 @@
 import fs                            from 'fs'
-import linebyline                    from 'n-readlines'
 import spawn                         from 'cross-spawn'
-import { find }                      from 'shelljs'
+import { find, grep }                from 'shelljs'
 
 import portTemplate                  from './templates/port'
 import mappingTemplate               from './templates/mapping'
@@ -97,15 +96,7 @@ function makeFolders(filenames) {
 }
 
 function hasView(filename) {
-	const liner = new linebyline(filename)
-	let line
-
-	while (line = liner.next()) {
-		if (line.indexOf('view =') != -1) {
-			return true
-		}
-	}
-	return false
+	return grep('view =', filename) !== ''
 }
 
 function executeBash(filename) {
