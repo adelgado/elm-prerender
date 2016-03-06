@@ -3,6 +3,14 @@ import linebyline                    from 'n-readlines'
 import spawn                         from 'cross-spawn'
 import { find }                      from 'shelljs'
 
+import portTemplate                  from './templates/port'
+import mappingTemplate               from './templates/mapping'
+import rendererTemplate              from './templates/renderer'
+import executorTemplate              from './templates/executor'
+import importTemplate                from './templates/import'
+
+import helpers                       from './helpers'
+
 function listFiles(path) {
 	return (find(path)
 		.filter(file => file.match(/\.elm$/))
@@ -12,27 +20,15 @@ function listFiles(path) {
 }
 
 function generatePort(moduleName) {
-	const portName = getPortName(moduleName)
-	return `
-port ${portName} : String
-port ${portName} =
-    ${moduleName}.view
-        |> render`
+	const portName = helpers.moduleToPortName(moduleName)
+	return portTemplate({portName, moduleName})
 }
 
 function generateImport(moduleName) {
-	return `import ${moduleName}`
+	return importTemplate({moduleName})
 }
 
-function getPortName(moduleName) {
-	return moduleName.replace('.','').toLowerCase()
-}
-
-function fileName(moduleName, basedir, withLower) {
-	if (basedir === null) {
-		basedir = './'
-	}
-
+function fileName(moduleName, basedir = './', withLower) {
 	const withBasedir = basedir + moduleName.replace('.','/')
 
 	if (withLower) {
@@ -43,7 +39,7 @@ function fileName(moduleName, basedir, withLower) {
 }
 
 function generateMapping(port, file) {
-	return `echo "fs.writeFile('${file}.html', elm.ports['${port}']);" >> _main.js`
+	return mappingTemplate({port, file})
 }
 
 function generateVDom(moduleNames, basedir) {
@@ -51,7 +47,7 @@ function generateVDom(moduleNames, basedir) {
 
 	for (let i = moduleNames.length - 1; i >= 0; i--) {
 		portFiles.push({
-			'port' : getPortName(moduleNames[i]),
+			'port' : helpers.moduleToPortName(moduleNames[i]),
 			'filename' : fileName(moduleNames[i], basedir, false)
 		})
 	}
@@ -72,28 +68,11 @@ function generateVDom(moduleNames, basedir) {
 	const rendererFilename = '_Renderer.elm'
 	const runnerFilename = './runner.sh'
 
-	const template = `
-module Renderer where
-import Html exposing (Html)
-import Native.Renderer
-
-${imports}
-
-render : Html -> String
-render = Native.Renderer.toHtml
-
-${ports}`
+	const template = rendererTemplate({imports, ports})
 
 	fs.writeFile(rendererFilename, template)
 
-	const executor = `
-#!/bin/sh
-elm-package install --yes
-elm make ${rendererFilename} --output=_main.js
-echo "var fs = require('fs');" >> _main.js
-echo "var elm = Elm.worker(Elm.Renderer);" >> _main.js
-${mappings}
-node _main.js`
+	const executor = executorTemplate({rendererFilename, mappings})
 
 	fs.writeFileSync(runnerFilename, executor)
 
@@ -135,12 +114,7 @@ function executeBash(filename) {
 }
 
 function main(inputFolder, outputFolder) {
-	const modules = listFiles(inputFolder).map(name =>
-		name
-			.replace(__dirname, '') // Make path relative
-			.split('.')[0] // Remove extension
-			.replace('/', '.') // Make it a legal Elm module name
-	)
+	const modules = listFiles(inputFolder).map(helpers.modulifyPath)
 
 	generateVDom(modules, outputFolder)
 }
