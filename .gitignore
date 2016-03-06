@@ -7,4 +7,7 @@ _main.js
 node_modules
 runner.sh
 _Renderer.elm
+
+# elm-prerender generated files
 output/
+dist/
