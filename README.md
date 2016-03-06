@@ -12,7 +12,8 @@ elm-package install
 To see an example, run
 
 ```bash
-node convert.js
+npm run build
+node dist/convert.js
 ```
 
 This will take the Elm files from `examples`, and convert them to static views in the `output` folder.
