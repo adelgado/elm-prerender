@@ -1,4 +1,4 @@
-/* eslint no-undef: 0 */
+/* global Elm */
 const make = function make(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {}
 	localRuntime.Native.Renderer = localRuntime.Native.Renderer || {}
