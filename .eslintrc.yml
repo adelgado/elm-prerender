@@ -8,9 +8,9 @@ parserOptions:
   sourceType: module
 
 rules:
-  indent: [error, tab]
-  linebreak-style: [error, unix]
-  quotes: [error, single]
-  semi: [error, never]
+  indent: [warn, tab]
+  linebreak-style: [warn, unix]
+  quotes: [warn, single]
+  semi: [warn, never]
   no-console: 0
   no-cond-assign: 0
