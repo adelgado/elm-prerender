@@ -63,18 +63,15 @@ function generateVDom(moduleNames, basedir) {
 	const ports = moduleNames.map(generatePort).join('\n')
 	const imports = moduleNames.map(generateImport).join('\n')
 
-	const portFileValues = portFiles.map(function(curr) {
-		return curr.filename
-	})
+	const portFileValues = portFiles.map(curr => curr.filename)
 
-	const maps = portFiles.map(function(curr) {
-		return generateMapping(curr.port, curr.filename)
-	})
+	const maps = portFiles.map(curr =>
+		generateMapping(curr.port, curr.filename)
+	)
 
 	const mappings = maps.join('\n')
 
 	makeFolders(portFileValues)
-
 
 	const rendererFilename = '_Renderer.elm'
 	const runnerFilename = './runner.sh'
