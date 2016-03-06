@@ -10,6 +10,7 @@ parserOptions:
 rules:
   indent: [warn, tab]
   linebreak-style: [warn, unix]
+  no-unused-vars: [warn]
   quotes: [warn, single]
   semi: [warn, never]
   no-console: 0
@@ -17,3 +18,4 @@ rules:
   no-var: 1
   prefer-const: 1
   camelcase: 1
+  max-len: [warn, 80]
