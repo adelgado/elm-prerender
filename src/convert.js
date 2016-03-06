@@ -16,7 +16,7 @@ function listFiles(path) {
 }
 
 function generatePort(module_name) {
-	var port_name = portName(module_name)
+	const port_name = portName(module_name)
 	return `
 port ${port_name} : String
 port ${port_name} =
@@ -37,7 +37,7 @@ function fileName(module_name, basedir, with_lower) {
 		basedir = './'
 	}
 
-	var with_basedir = basedir + module_name.replace('.','/')
+	const with_basedir = basedir + module_name.replace('.','/')
 
 	if (with_lower) {
 		return with_basedir.toLowerCase()
@@ -51,35 +51,35 @@ function generateMapping(port, file) {
 }
 
 function generate_vdom(module_names, basedir) {
-	var port_files = []
+	const port_files = []
 
-	for (var i = module_names.length - 1; i >= 0; i--) {
+	for (let i = module_names.length - 1; i >= 0; i--) {
 		port_files.push({
 			'port' : portName(module_names[i]),
 			'filename' : fileName(module_names[i], basedir, false)
 		})
 	}
 
-	var ports = module_names.map(generatePort).join('\n')
-	var imports = module_names.map(generateImport).join('\n')
+	const ports = module_names.map(generatePort).join('\n')
+	const imports = module_names.map(generateImport).join('\n')
 
-	var port_file_values = port_files.map(function(curr) {
+	const port_file_values = port_files.map(function(curr) {
 		return curr.filename
 	})
 
-	var maps = port_files.map(function(curr) {
+	const maps = port_files.map(function(curr) {
 		return generateMapping(curr.port, curr.filename)
 	})
 
-	var mappings = maps.join('\n')
+	const mappings = maps.join('\n')
 
 	makeFolders(port_file_values)
 
 
-	var renderer_filename = '_Renderer.elm'
-	var runner_filename = './runner.sh'
+	const renderer_filename = '_Renderer.elm'
+	const runner_filename = './runner.sh'
 
-	var template = `
+	const template = `
 module Renderer where
 import Html exposing (Html)
 import Native.Renderer
@@ -93,7 +93,7 @@ ${ports}`
 
 	fs.writeFile(renderer_filename, template)
 
-	var executor = `
+	const executor = `
 #!/bin/sh
 elm-package install --yes
 elm make ${renderer_filename} --output=_main.js
@@ -110,7 +110,7 @@ node _main.js`
 function makeFolders(filenames) {
 	filenames.forEach(function(filename) {
 		if (filename.split('/').length > 1 || filename.startsWith('.') != -1) {
-			var dir = filename.substring(0, filename.lastIndexOf('/'))
+			const dir = filename.substring(0, filename.lastIndexOf('/'))
 			try {
 				fs.mkdirSync(dir)
 			} catch (e) {
@@ -129,13 +129,13 @@ function isFile(path) {
 }
 
 function getFilename(path) {
-	var parts = path.split('/')
+	const parts = path.split('/')
 	return parts[parts.length - 1]
 }
 
 function hasView(filename) {
-	var liner = new linebyline(filename)
-	var line
+	const liner = new linebyline(filename)
+	let line
 
 	while (line = liner.next()) {
 		if (line.indexOf('view =') != -1) {
@@ -146,7 +146,7 @@ function hasView(filename) {
 }
 
 function cleanUp(name) {
-	var new_name = name.replace(__dirname, '')
+	const new_name = name.replace(__dirname, '')
 	return new_name.split('.')[0].replace('/', '.')
 }
 
@@ -156,7 +156,7 @@ function executeBash(filename) {
 }
 
 function main() {
-	var files = listFiles('examples/').map(cleanUp)
+	const files = listFiles('examples/').map(cleanUp)
 	generate_vdom(files, 'output/')
 }
 
