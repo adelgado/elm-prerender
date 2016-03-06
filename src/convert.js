@@ -145,19 +145,20 @@ function hasView(filename) {
 	return false
 }
 
-function cleanUp(name) {
-	const newName = name.replace(__dirname, '')
-	return newName.split('.')[0].replace('/', '.')
-}
-
 function executeBash(filename) {
 	fs.chmod(filename, '0755')
 	spawn('sh', [filename], { stdio: 'inherit' })
 }
 
-function main() {
-	const files = listFiles('examples/').map(cleanUp)
-	generateVDom(files, 'output/')
+function main(inputFolder, outputFolder) {
+	const files = listFiles(inputFolder).map(function (name) {
+		// Make path relative
+		const newName = name.replace(__dirname, '')
+		// Remove extension
+		return newName.split('.')[0].replace('/', '.')
+	})
+
+	generateVDom(files, outputFolder)
 }
 
-main()
+export default main

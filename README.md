@@ -13,10 +13,10 @@ To see an example, run
 
 ```bash
 npm run build
-node dist/convert.js
+node dist/convert.js --input-folder input/ --output-folder output/
 ```
 
-This will take the Elm files from `examples`, and convert them to static views in the `output` folder.
+This will take the Elm files from `input/` and convert them to static views in the `output/` folder.
 
 ## How it works
 
