@@ -20,9 +20,9 @@ function listFiles(path) {
 function generatePort(module_name) {
     var port_name = portName(module_name);
     return `
-port ${port_name} : String 
+port ${port_name} : String
 port ${port_name} =
-    ${module_name}.view 
+    ${module_name}.view
         |> render`;
 }
 
@@ -38,12 +38,12 @@ function fileName(module_name, basedir, with_lower) {
 
     if (basedir === null) {
         basedir = './';
-    } 
+    }
     var with_basedir = basedir + module_name.replace('.','/');
 
     if (with_lower) {
         return with_basedir.toLowerCase();
-    } 
+    }
     return with_basedir;
 }
 
@@ -140,7 +140,7 @@ function hasView(filename) {
         if (line.indexOf('view =') != -1) {
             return true;
         }
-    } 
+    }
     return false;
 }
 
