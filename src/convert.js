@@ -1,15 +1,11 @@
 import fs                            from 'fs'
-import glob                          from 'glob'
 import linebyline                    from 'n-readlines'
 import spawn                         from 'cross-spawn'
+import { find }                      from 'shelljs'
 
 function listFiles(path) {
-	const hasElmExtension = file => getFilename(file).split('.')[1] === 'elm'
-
-	return (glob
-		.sync(path + '**')
-		.filter(isFile)
-		.filter(hasElmExtension)
+	return (find(path)
+		.filter(file => file.match(/\.elm$/))
 		.filter(hasView)
 		.map(file => file.replace(path, ''))
 	)
@@ -121,15 +117,6 @@ function makeFolders(filenames) {
 	})
 }
 
-function isFile(path) {
-	return fs.lstatSync(path).isFile()
-}
-
-function getFilename(path) {
-	const parts = path.split('/')
-	return parts[parts.length - 1]
-}
-
 function hasView(filename) {
 	const liner = new linebyline(filename)
 	let line
@@ -148,14 +135,14 @@ function executeBash(filename) {
 }
 
 function main(inputFolder, outputFolder) {
-	const files = listFiles(inputFolder).map(function (name) {
-		// Make path relative
-		const newName = name.replace(__dirname, '')
-		// Remove extension
-		return newName.split('.')[0].replace('/', '.')
-	})
+	const modules = listFiles(inputFolder).map(name =>
+		name
+			.replace(__dirname, '') // Make path relative
+			.split('.')[0] // Remove extension
+			.replace('/', '.') // Make it a legal Elm module name
+	)
 
-	generateVDom(files, outputFolder)
+	generateVDom(modules, outputFolder)
 }
 
 export default main

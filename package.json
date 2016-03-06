@@ -26,9 +26,9 @@
     "command-line-tool": "git+https://github.com/75lb/command-line-tool.git#4228c5d3d1f5bf894046c835c97755eb8c05a1c5",
     "command-line-usage": "^2.0.3",
     "cross-spawn": "^2.1.5",
-    "glob": "^7.0.3",
     "n-readlines": "^0.2.2",
     "node-cmd": "^1.1.1",
+    "shelljs": "^0.6.0",
     "vdom-to-html": "^2.2.0",
     "virtual-dom": "^2.1.1"
   },
