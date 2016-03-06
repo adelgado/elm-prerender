@@ -7,11 +7,9 @@ function listFiles(path) {
 	return (glob
 		.sync(path + '**')
 		.filter(isFile)
-		.filter(function(file){
-			return getFilename(file).split('.')[1] === 'elm'
-		}).filter(hasView).map(function(file) {
-			return file.replace(path, '')
-		})
+		.filter(file => getFilename(file).split('.')[1] === 'elm')
+		.filter(hasView)
+		.map(file => file.replace(path, ''))
 	)
 }
 
