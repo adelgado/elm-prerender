@@ -4,12 +4,12 @@ import linebyline                    from 'n-readlines'
 import spawn                         from 'cross-spawn'
 
 function listFiles(path) {
-	const isElmFile = file => getFilename(file).split('.')[1] === 'elm'
+	const hasElmExtension = file => getFilename(file).split('.')[1] === 'elm'
 
 	return (glob
 		.sync(path + '**')
 		.filter(isFile)
-		.filter(isElmFile)
+		.filter(hasElmExtension)
 		.filter(hasView)
 		.map(file => file.replace(path, ''))
 	)
