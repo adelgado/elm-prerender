@@ -1,11 +1,12 @@
 import fs                            from 'fs'
 import spawn                         from 'cross-spawn'
 import { find, grep }                from 'shelljs'
+import compiler                      from 'node-elm-compiler'
 
 import portTemplate                  from './templates/port'
 import mappingTemplate               from './templates/mapping'
 import rendererTemplate              from './templates/renderer'
-import executorTemplate              from './templates/executor'
+import runnerTemplate                from './templates/runner'
 import importTemplate                from './templates/import'
 
 import helpers                       from './helpers'
@@ -60,22 +61,27 @@ function generateVDom(moduleNames, basedir) {
 		generateMapping(curr.port, curr.filename)
 	)
 
-	const mappings = maps.join('\n')
+	const fileMappings = maps.join('\n')
 
 	makeFolders(portFileValues)
 
 	const rendererFilename = '_Renderer.elm'
-	const runnerFilename = './runner.sh'
 
 	const template = rendererTemplate({imports, ports})
 
 	fs.writeFile(rendererFilename, template)
 
-	const executor = executorTemplate({rendererFilename, mappings})
+	compiler.compile([rendererFilename], { output: '_main.js'})
+		.on('close', exitCode => {
+			console.log('Compiler finished with exit code', exitCode)
 
-	fs.writeFileSync(runnerFilename, executor)
+			const runnerFilename = './runner.sh'
+			const runner = runnerTemplate({rendererFilename, fileMappings})
 
-	executeBash(runnerFilename)
+			fs.writeFileSync(runnerFilename, runner)
+			fs.chmod(runnerFilename, '0755')
+			spawn('sh', [runnerFilename], { stdio: 'inherit' })
+		})
 }
 
 function makeFolders(filenames) {
@@ -93,11 +99,6 @@ function makeFolders(filenames) {
 			}
 		}
 	})
-}
-
-function executeBash(filename) {
-	fs.chmod(filename, '0755')
-	spawn('sh', [filename], { stdio: 'inherit' })
 }
 
 function main(inputFolder, outputFolder) {

@@ -27,6 +27,7 @@
     "command-line-usage": "^2.0.3",
     "cross-spawn": "^2.1.5",
     "node-cmd": "^1.1.1",
+    "node-elm-compiler": "^3.0.0",
     "shelljs": "^0.6.0",
     "vdom-to-html": "^2.2.0",
     "virtual-dom": "^2.1.1"
