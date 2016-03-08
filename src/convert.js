@@ -6,7 +6,6 @@ import compiler                      from 'node-elm-compiler'
 import portTemplate                  from './templates/port'
 import mappingTemplate               from './templates/mapping'
 import rendererTemplate              from './templates/renderer'
-import runnerTemplate                from './templates/runner'
 import importTemplate                from './templates/import'
 
 import helpers                       from './helpers'
@@ -71,16 +70,13 @@ function generateVDom(moduleNames, basedir) {
 
 	fs.writeFile(rendererFilename, template)
 
-	compiler.compile([rendererFilename], { output: '_main.js'})
-		.on('close', exitCode => {
-			console.log('Compiler finished with exit code', exitCode)
-
-			const runnerFilename = './runner.sh'
-			const runner = runnerTemplate({rendererFilename, fileMappings})
-
-			fs.writeFileSync(runnerFilename, runner)
-			fs.chmod(runnerFilename, '0755')
-			spawn('sh', [runnerFilename], { stdio: 'inherit' })
+	compiler.compileToString([rendererFilename], { yes: true })
+		.then(data => {
+			data += "\nvar fs = require('fs');"
+			data += "\nvar elm = Elm.worker(Elm.Renderer);"
+			data += `\n${fileMappings}`
+			fs.writeFileSync('./_main.js', data)
+			spawn('node', ['./_main.js'], { stdio: 'inherit' })
 		})
 }
 
