@@ -72,8 +72,8 @@ function generateVDom(moduleNames, basedir) {
 
 	compiler.compileToString([rendererFilename], { yes: true })
 		.then(data => {
-			data += "\nvar fs = require('fs');"
-			data += "\nvar elm = Elm.worker(Elm.Renderer);"
+			data += "\nvar fs = require('fs')"
+			data += '\nvar elm = Elm.worker(Elm.Renderer)'
 			data += `\n${fileMappings}`
 			fs.writeFileSync('./_main.js', data)
 			spawn('node', ['./_main.js'], { stdio: 'inherit' })
