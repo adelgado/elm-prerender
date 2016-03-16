@@ -8,15 +8,15 @@ parserOptions:
   sourceType: module
 
 rules:
-  indent: [warn, tab]
-  linebreak-style: [warn, unix]
-  no-undef: [warn]
-  no-unused-vars: [warn]
-  quotes: [warn, single]
-  semi: [warn, never]
+  indent: [1, tab]
+  linebreak-style: [1, unix]
+  no-undef: [1]
+  no-unused-vars: [1]
+  quotes: [1, single]
+  semi: [1, never]
   no-console: 0
   no-cond-assign: 0
   no-var: 1
   prefer-const: 1
   camelcase: 1
-  max-len: [warn, 80]
+  max-len: [1, 80]
