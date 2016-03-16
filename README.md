@@ -2,12 +2,17 @@
 
 Proof of concept static site generator from Elm files.
 
-setup
+## Hacking
 
-```
+After cloning the repo and moving inside its folder run
+
+```bash
 npm install
 elm-package install
 ```
+
+
+## Example
 
 To see an example, run
 
@@ -20,6 +25,10 @@ This will take the Elm files from `input/` and convert them to static views in t
 
 ## How it works
 
-Goes through folder, find elm files. If you want that file to be turned into a compiled output, then you need to have `view =` defining the output that you want it to have.
+elm-prerender goes through the input folder and looks for Elm files. To be
+turned into compiled output, file needs to have a `view =` defining the output.
 
-Either way, right now, if you're using the example folder, you need a `view : Html`. This is your entry point. This `Html` will be rendered as actual html into a file with the same name, but lowercase. E.g `Index.elm -> index.html`, `Blog.Index.elm` -> `blog/index.html`.
+Either way, right now, if you're using the example folder, you need a
+`view : Html`. This is your entry point. This `Html` will be rendered as
+actual HTML into a file with the same name, but lowercase.
+E.g. `Index.elm -> index.html`, `Blog.Index.elm` -> `blog/index.html`.
