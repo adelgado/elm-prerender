@@ -17,6 +17,7 @@ rules:
   no-undef: [1]
   no-unused-vars: [1]
   no-var: 1
+  object-shorthand: [1, always]
   prefer-const: 1
   quotes: [1, single, avoid-escape]
   semi: [1, never]
