@@ -8,15 +8,15 @@ parserOptions:
   sourceType: module
 
 rules:
+  camelcase: 1
   indent: [1, tab]
   linebreak-style: [1, unix]
+  max-len: [1, 80]
+  no-cond-assign: 0
+  no-console: 0
   no-undef: [1]
   no-unused-vars: [1]
-  quotes: [1, single]
-  semi: [1, never]
-  no-console: 0
-  no-cond-assign: 0
   no-var: 1
   prefer-const: 1
-  camelcase: 1
-  max-len: [1, 80]
+  quotes: [1, single, avoid-escape]
+  semi: [1, never]
