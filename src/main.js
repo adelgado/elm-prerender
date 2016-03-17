@@ -1,6 +1,5 @@
 import fs                            from 'fs'
 import spawn                         from 'cross-spawn'
-import { find, grep }                from 'shelljs'
 import compiler                      from 'node-elm-compiler'
 
 import portTemplate                  from './templates/port'
@@ -9,14 +8,7 @@ import rendererTemplate              from './templates/renderer'
 import importTemplate                from './templates/import'
 
 import helpers                       from './helpers'
-
-function listFiles(path) {
-	return (find(path)
-		.filter(file => file.match(/\.elm$/))
-		.filter(file => grep('view =', file) !== '')
-		.map(file => file.replace(path, ''))
-	)
-}
+import files                         from './files'
 
 function generatePort(moduleName) {
 	const portName = helpers.moduleToPortName(moduleName)
@@ -98,7 +90,7 @@ function makeFolders(filenames) {
 }
 
 function main(inputFolder, outputFolder) {
-	const modules = listFiles(inputFolder).map(helpers.modulifyPath)
+	const modules = files.listByPath(inputFolder).map(helpers.modulifyPath)
 
 	generateVDom(modules, outputFolder)
 }
