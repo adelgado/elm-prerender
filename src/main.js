@@ -10,6 +10,13 @@ import importTemplate                from './templates/import'
 import helpers                       from './helpers'
 import files                         from './files'
 
+
+export default function main(inputFolder, outputFolder) {
+	const modules = files.listByPath(inputFolder).map(helpers.modulifyPath)
+
+	generateVDom(modules, outputFolder)
+}
+
 function generatePort(moduleName) {
 	const portName = helpers.moduleToPortName(moduleName)
 	return portTemplate({portName, moduleName})
@@ -89,10 +96,3 @@ function makeFolders(filenames) {
 	})
 }
 
-function main(inputFolder, outputFolder) {
-	const modules = files.listByPath(inputFolder).map(helpers.modulifyPath)
-
-	generateVDom(modules, outputFolder)
-}
-
-export default main
