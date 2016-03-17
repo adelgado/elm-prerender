@@ -1,15 +1,15 @@
 export default {
-	modulifyPath: name => {
-		if (name.startsWith('/')) {
-			const message =
-				"File path must be relative (can't start with slash). " +
-				`Got '${name}'`
-			throw new Error(message)
-		} else {
-			return name
-				.split('.')[0]            // Remove extension
-				.replace('/', '.')        // Make it a legal Elm module name
+	/* Turns a path to a file into a valid Elm module name */
+	modulifyPath: (name, basedir) => {
+		if (!basedir.endsWith('/')) {
+			// Make sure there are no leading slashes on our module names
+			basedir = basedir + '/'
 		}
+
+		return name
+			.replace(RegExp('^' + basedir), '')     // Remove base directory
+			.replace('\.elm', '')     // Remove extension
+			.replace('/', '.')        // Make it a legal Elm module name
 	}
 ,
 	moduleToPortName: moduleName =>

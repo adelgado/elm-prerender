@@ -1,6 +1,7 @@
 import fs                            from 'fs'
 import spawn                         from 'cross-spawn'
 import compiler                      from 'node-elm-compiler'
+import { find }                      from 'shelljs'
 
 import portTemplate                  from './templates/port'
 import mappingTemplate               from './templates/mapping'
@@ -9,13 +10,6 @@ import importTemplate                from './templates/import'
 
 import helpers                       from './helpers'
 import files                         from './files'
-
-
-export default function main(inputFolder, outputFolder) {
-	const modules = files.listByPath(inputFolder).map(helpers.modulifyPath)
-
-	generateVDom(modules, outputFolder)
-}
 
 function generatePort(moduleName) {
 	const portName = helpers.moduleToPortName(moduleName)
@@ -26,12 +20,8 @@ function generateImport(moduleName) {
 	return importTemplate({moduleName})
 }
 
-function fileName(moduleName, basedir = './', withLower) {
+function fileName(moduleName, basedir = './') {
 	const withBasedir = basedir + moduleName.replace('.','/')
-
-	if (withLower) {
-		return withBasedir.toLowerCase()
-	}
 
 	return withBasedir
 }
@@ -40,13 +30,28 @@ function generateMapping(port, file) {
 	return mappingTemplate({port, file})
 }
 
-function generateVDom(moduleNames, basedir) {
+
+export default function main(inputFolder, outputFolder) {
+	console.log('Input folder is', inputFolder)
+	console.log('Ouput folder is', outputFolder)
+
+	const inputFiles = find(inputFolder)
+	console.log('These are the input files', inputFiles)
+
+	const elmViewFiles = files.filterElmViewFile(inputFiles)
+	console.log('The following suitable files were found', elmViewFiles)
+
+	const moduleNames = elmViewFiles.map(file =>
+		helpers.modulifyPath(file, inputFolder)
+	)
+	console.log('We have the modules, they\'re', moduleNames)
+
 	const portFiles = []
 
 	for (let i = moduleNames.length - 1; i >= 0; i--) {
 		portFiles.push({
 			'port' : helpers.moduleToPortName(moduleNames[i]),
-			'filename' : fileName(moduleNames[i], basedir, false)
+			'filename' : fileName(moduleNames[i], outputFolder)
 		})
 	}
 
