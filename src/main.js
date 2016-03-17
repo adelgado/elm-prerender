@@ -50,9 +50,6 @@ function generateVDom(moduleNames, basedir) {
 		})
 	}
 
-	const ports = moduleNames.map(generatePort).join('\n')
-	const imports = moduleNames.map(generateImport).join('\n')
-
 	const portFileValues = portFiles.map(curr => curr.filename)
 
 	const maps = portFiles.map(curr =>
@@ -63,6 +60,13 @@ function generateVDom(moduleNames, basedir) {
 
 	makeFolders(portFileValues)
 
+	const ports = moduleNames.map(generatePort).join('\n')
+	const imports = moduleNames.map(generateImport).join('\n')
+
+	writeRendererAndMain(imports, ports, fileMappings)
+}
+
+function writeRendererAndMain(imports, ports, fileMappings) {
 	const rendererFilename = '_Renderer.elm'
 
 	const template = rendererTemplate({imports, ports})
