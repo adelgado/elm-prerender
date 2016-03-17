@@ -3,6 +3,7 @@ import getUsage             from 'command-line-usage'
 import tool                 from 'command-line-tool'
 
 import main from './main'
+import verbose from './verbose'
 
 const cliDefinitions = [
 	{ name: 'input-folder'
@@ -24,10 +25,18 @@ const cliDefinitions = [
 	, description: 'Displays this usage text'
 	, type: Boolean
 	}
+,
+	{ name: 'verbose'
+	, alias: 'v'
+	, description: 'Display extended output'
+	, type: Boolean
+	}
 ]
 
 const cli = commandLineArgs(cliDefinitions)
 const options = cli.parse()
+
+verbose.setVerbosity(options.verbose)
 
 if (options.help) {
 	const usage = getUsage(cliDefinitions, options)

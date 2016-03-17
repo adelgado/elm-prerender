@@ -10,6 +10,7 @@ import importTemplate                from './templates/import'
 
 import helpers                       from './helpers'
 import files                         from './files'
+import verbose                       from './verbose'
 
 function generatePort(moduleName) {
 	const portName = helpers.moduleToPortName(moduleName)
@@ -30,21 +31,28 @@ function generateMapping(port, file) {
 	return mappingTemplate({port, file})
 }
 
-
 export default function main(inputFolder, outputFolder) {
-	console.log('Input folder is', inputFolder)
-	console.log('Ouput folder is', outputFolder)
+	if (verbose.isVerbose()) {
+		console.log('Input folder is', inputFolder)
+		console.log('Ouput folder is', outputFolder)
+	}
 
 	const inputFiles = find(inputFolder)
-	console.log('These are the input files', inputFiles)
+	if (verbose.isVerbose()) {
+		console.log('These are the input files', inputFiles)
+	}
 
 	const elmViewFiles = files.filterElmViewFile(inputFiles)
-	console.log('The following suitable files were found', elmViewFiles)
+	if (verbose.isVerbose()) {
+		console.log('The following suitable files were found', elmViewFiles)
+	}
 
 	const moduleNames = elmViewFiles.map(file =>
 		helpers.modulifyPath(file, inputFolder)
 	)
-	console.log('We have the modules, they\'re', moduleNames)
+	if (verbose.isVerbose()) {
+		console.log('We have the modules, they\'re', moduleNames)
+	}
 
 	const portFiles = []
 
@@ -96,7 +104,9 @@ function makeFolders(filenames) {
 				fs.mkdirSync(dir)
 			} catch (e) {
 				if (e.code === 'EEXIST') {
-					console.warn(`${dir} already exists`)
+					if (verbose.isVerbose()) {
+						console.warn(`${dir} already exists`)
+					}
 				} else {
 					throw e
 				}
