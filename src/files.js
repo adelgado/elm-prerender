@@ -10,10 +10,10 @@ export default {
 
 	filterFiles (files, path) {
 		return (files
-			.filter(file => file.match(/\.elm$/))
-			.filter(file => grep('view =', file) !== '')
-			.map(file => file.replace(path, ''))
-			.map(file => file.replace(/^\//, ''))
+			.filter(file => file.match(/\.elm$/))        // .elm files
+			.filter(file => grep('view =', file) !== '') // with a view function
+			.map(file => file.replace(path, ''))         // with a
+			.map(file => file.replace(/^\//, ''))        //        relative path
 		)
 	}
 
