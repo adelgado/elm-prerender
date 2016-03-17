@@ -8,6 +8,7 @@ parserOptions:
   sourceType: module
 
 rules:
+  arrow-parens: [1, as-needed]
   camelcase: 1
   indent: [1, tab]
   linebreak-style: [1, unix]
