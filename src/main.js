@@ -51,7 +51,7 @@ export default function main(inputFolder, outputFolder) {
 		helpers.modulifyPath(file, inputFolder)
 	)
 	if (verbose.isVerbose()) {
-		console.log('We have the modules, they\'re', moduleNames)
+		console.log("We have the modules, they're", moduleNames)
 	}
 
 	const portFiles = []
