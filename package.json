@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint {src,Native,test}/*.js",
     "build": "babel src -d dist",
-    "test": "mocha --compilers js:babel-register"
+    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-register"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "command-line-tool": "git+https://github.com/75lb/command-line-tool.git#4228c5d3d1f5bf894046c835c97755eb8c05a1c5",
     "command-line-usage": "^2.0.3",
     "cross-spawn": "^2.1.5",
+    "mocha": "^2.4.5",
     "node-cmd": "^1.1.1",
     "node-elm-compiler": "^3.0.0",
     "shelljs": "^0.6.0",
