@@ -3,13 +3,13 @@ export default {
 	modulifyPath: (name, basedir) => {
 		if (!basedir.endsWith('/')) {
 			// Make sure there are no leading slashes on our module names
-			basedir = basedir + '/'
+			basedir = `${basedir}/`
 		}
 
 		return name
-			.replace(RegExp('^' + basedir), '')     // Remove base directory
-			.replace('\.elm', '')     // Remove extension
-			.replace('/', '.')        // Make it a legal Elm module name
+			.replace(RegExp(`^${basedir}`), '')         // Remove base directory
+			.replace('\.elm', '')                       // Remove extension
+			.replace('/', '.')                // Make it a legal Elm module name
 	}
 ,
 	moduleToPortName: moduleName =>

@@ -36,14 +36,10 @@ export default function main(inputFolder, outputFolder) {
 		console.log("We have the modules, they're", moduleNames)
 	}
 
-	const portFiles = []
-
-	for (let i = moduleNames.length - 1; i >= 0; i--) {
-		portFiles.push({
-			'port' : helpers.moduleToPortName(moduleNames[i]),
-			'filename' : fileName(moduleNames[i], outputFolder)
-		})
-	}
+	const portFiles = moduleNames.map(moduleName => ({
+		port: helpers.moduleToPortName(moduleName),
+		filename: fileName(moduleName, outputFolder)
+	}))
 
 	const portFileValues = portFiles.map(curr => curr.filename)
 
@@ -104,9 +100,7 @@ function generateImport(moduleName) {
 }
 
 function fileName(moduleName, basedir = './') {
-	const withBasedir = basedir + moduleName.replace('.','/')
-
-	return withBasedir
+	return basedir + moduleName.replace('.','/')
 }
 
 function generateMapping(port, file) {

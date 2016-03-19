@@ -6,9 +6,7 @@ const make = function make(localRuntime) {
 
 	const toHtml = require('vdom-to-html')
 
-	return {
-		'toHtml': toHtml
-	}
+	return { toHtml: toHtml }
 }
 
 Elm.Native = Elm.Native || {}
