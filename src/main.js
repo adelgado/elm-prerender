@@ -97,8 +97,8 @@ function writeRendererAndMain(imports, ports, fileMappings) {
 }
 
 function makeFolders(filenames) {
-	filenames.forEach(function(filename) {
-		if (filename.split('/').length > 1 || filename.startsWith('.') != -1) {
+	filenames.forEach(filename => {
+		if (filename.split('/').length > 1 || filename.startsWith('.') !== -1) {
 			const dir = filename.substring(0, filename.lastIndexOf('/'))
 			try {
 				fs.mkdirSync(dir)
@@ -114,4 +114,3 @@ function makeFolders(filenames) {
 		}
 	})
 }
-
