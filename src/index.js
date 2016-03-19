@@ -50,4 +50,6 @@ if (options.help) {
 	tool.stop()
 } else {
 	main(options['input-folder'], options['output-folder'])
+		.then(console.log)
+		.catch(console.log)
 }

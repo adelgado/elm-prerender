@@ -76,7 +76,7 @@ export default function main(inputFolder, outputFolder) {
 	const ports = moduleNames.map(generatePort).join('\n')
 	const imports = moduleNames.map(generateImport).join('\n')
 
-	writeRendererAndMain(imports, ports, fileMappings)
+	return writeRendererAndMain(imports, ports, fileMappings)
 }
 
 function writeRendererAndMain(imports, ports, fileMappings) {
@@ -86,14 +86,30 @@ function writeRendererAndMain(imports, ports, fileMappings) {
 
 	fs.writeFile(rendererFilename, template)
 
-	compiler.compileToString([rendererFilename], { yes: true })
-		.then(data => {
-			data += "\nvar fs = require('fs')"
-			data += '\nvar elm = Elm.worker(Elm.Renderer)'
-			data += `\n${fileMappings}`
-			fs.writeFileSync('./_main.js', data)
-			spawn('node', ['./_main.js'], { stdio: 'inherit' })
-		})
+	return new Promise((fullfill, reject) => {
+		compiler.compileToString([rendererFilename], { yes: true })
+			.then(data => {
+				data += "\nvar fs = require('fs')"
+				data += '\nvar elm = Elm.worker(Elm.Renderer)'
+				data += `\n${fileMappings}`
+				fs.writeFileSync('./_main.js', data)
+				const process = spawn('node', ['./_main.js'],
+					{stdio: 'inherit'}
+				)
+
+				const handle = setInterval(function() {
+					if (Number.isInteger(process.exitCode)) {
+						clearInterval(handle)
+
+						if (process.exitCode === 0) {
+							fullfill('Compilation was successful')
+						} else {
+							reject('Compilation failed')
+						}
+					}
+				}, 500)
+			})
+	})
 }
 
 function makeFolders(filenames) {
