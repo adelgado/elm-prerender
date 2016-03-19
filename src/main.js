@@ -12,24 +12,6 @@ import helpers                       from './helpers'
 import files                         from './files'
 import verbose                       from './verbose'
 
-function generatePort(moduleName) {
-	const portName = helpers.moduleToPortName(moduleName)
-	return portTemplate({portName, moduleName})
-}
-
-function generateImport(moduleName) {
-	return importTemplate({moduleName})
-}
-
-function fileName(moduleName, basedir = './') {
-	const withBasedir = basedir + moduleName.replace('.','/')
-
-	return withBasedir
-}
-
-function generateMapping(port, file) {
-	return mappingTemplate({port, file})
-}
 
 export default function main(inputFolder, outputFolder) {
 	if (verbose.isVerbose()) {
@@ -110,6 +92,25 @@ function writeRendererAndMain(imports, ports, fileMappings) {
 				}, 500)
 			})
 	})
+}
+
+function generatePort(moduleName) {
+	const portName = helpers.moduleToPortName(moduleName)
+	return portTemplate({portName, moduleName})
+}
+
+function generateImport(moduleName) {
+	return importTemplate({moduleName})
+}
+
+function fileName(moduleName, basedir = './') {
+	const withBasedir = basedir + moduleName.replace('.','/')
+
+	return withBasedir
+}
+
+function generateMapping(port, file) {
+	return mappingTemplate({port, file})
 }
 
 function makeFolders(filenames) {
