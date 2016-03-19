@@ -16,10 +16,14 @@ rules:
   max-len: [1, 80]
   no-cond-assign: 0
   no-console: 0
+  no-implicit-globals: 1
+  no-lone-blocks: 1
   no-undef: [1]
   no-unused-vars: [1]
   no-var: 1
   object-shorthand: [1, always]
   prefer-const: 1
+  prefer-template: 1
+  quote-props: [1, consistent-as-needed]
   quotes: [1, single, avoid-escape]
   semi: [1, never]
